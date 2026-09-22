@@ -1,0 +1,114 @@
+# ============================ Secrets & env ============================
+# 真实环境变量 / 凭证，永远不要进 Git
+.env
+.env.*
+!.env.example
+
+# 任何包含真实凭证的备份 / 草稿
+*.env.local
+*.env.*.local
+secrets.*
+credentials.*
+
+# ============================ Python ============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# ============================ Virtualenv ============================
+.venv/
+venv/
+env/
+ENV/
+
+# ============================ Node / Frontend ============================
+node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+frontend/.env
+frontend/.env.local
+
+# ============================ Logs & runtime ============================
+*.log
+logs/
+data/logs/
+runtime.log
+backend.log
+
+# ============================ Local data & backups ============================
+backups/
+*.sql
+!docs/**/*.sql
+!app/sql/migrations/*.sql
+!scripts/*.sql
+
+# data/ 目录：保留基础 A 股 CSV；其余运行时产物全部忽略
+data/cache/
+data/financial_data/
+data/reports/
+data/models/
+data/backtest/
+data/pdfs/
+data/vector_db/
+data/chanpy_rebuilds/
+data/strategy_signals.jsonl
+data/industry_sync.exit
+data/industry_sync.log
+data/kline_initialization.log
+data/database_recovery_report.md
+data/*.json
+!data/.gitkeep
+!data/a股全量_基础_申万2021_唯一行业.csv
+
+# ============================ IDE ============================
+.vscode/
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ============================ ML / Experiment tracking ============================
+mlruns/
+mlartifacts/
+*.mlmodel
+
+# ============================ OpenSpec / Nanobot ============================
+openspec/
+memory/
+.nanobot/
+.agents/
+.agent/
+
+# ============================ Sessions & local outputs ============================
+sessions/
+output/*.json
+!output/.gitkeep
+data/output/
+
+# ============================ qlib ============================
+.qlib/
+qlib_data/
+
+# ============================ Claude Code local ============================
+.claude/
+.codebuddy/
+
+# ============================ Misc ============================
+fuller
+*.tmp
+*.bak
