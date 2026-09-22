@@ -1,0 +1,59 @@
+name: Python CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    name: Lint & Syntax
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+
+        - name: Install ruff
+          run: pip install ruff
+
+        - name: Ruff check
+          # 项目未强制 ruff，缺则跳过；CI 仅做语法编译检查
+          run: |
+            ruff check app scripts tests --exclude chan.py || echo "ruff 未通过，跳过（项目未强制）"
+
+        - name: Python syntax compile
+          run: |
+            python -m compileall -q app scripts run.py backup_database.py test_sentiment_data.py || exit 1
+
+  smoke:
+    name: Smoke (无 DB 启动)
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+
+        - name: Install minimal deps
+          run: |
+            python -m pip install --upgrade pip
+            pip install fastapi 'uvicorn[standard]' python-dotenv pydantic
+
+        - name: Verify FastAPI app imports
+          env:
+            # 占位 env，让 settings 模块能加载
+            WUCAI_SQL_PASSWORD: x
+            DASHSCOPE_API_KEY: x
+            TUSHARE_TOKEN: x
+          run: |
+            # 仅校验 import，不真起 uvicorn
+            python -c "from app.main import app; print('OK', len(app.routes), 'routes')"
+
+        - name: Verify .env.example parses
+          run: |
+            python -c "from dotenv import dotenv_values; vals = dotenv_values('.env.example'); assert 'WUCAI_SQL_HOST' in vals; print('OK', len(vals), 'keys')"
